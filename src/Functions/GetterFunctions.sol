@@ -1,0 +1,95 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.13;
+
+import "../StateVariables.sol";
+import "../Utility/MaxHeap.sol";
+import "../Utility/MinHeap.sol";
+
+contract GetterFunctions is StateVariables {
+    using MaxHeapLib for MaxHeap;
+    using MinHeapLib for MinHeap;
+
+    // Following function gives the maximum number of perps that can be sold or bought
+    function getMaxNumberOfTradablePerp() external view returns (int256) {
+        return numberOfPerpInLiquidityPool;
+    }
+
+    // Following function gives the number of perp in short or long position of a specific trader
+    function getNumberOfPerpInOpenPositionOfTrader(
+        address traderAddress
+    ) external view returns (int256) {
+        if (marginOfLongPositionTraderHashmap[traderAddress] != 0) {
+            return perpCountOfTraderWithLongPositionHashmap[traderAddress];
+        } else {
+            return perpCountOfTraderWithShortPositionHashmap[traderAddress];
+        }
+    }
+
+    // Following function gives the perp Price at which a trader entered a trade
+    function getPerpPriceAtWhichTraderEnteredTheTrade(
+        address traderAddress
+    ) external view returns (int256) {
+        if (marginOfLongPositionTraderHashmap[traderAddress] != 0) {
+            return priceAtWhichPerpWasBoughtHashmap[traderAddress];
+        } else if (marginOfShortPositionTraderHashmap[traderAddress] != 0) {
+            return priceAtWhichPerpWasSoldHashmap[traderAddress];
+        } else {
+            return -1;
+            // Here , -1 shows that trader has no open position
+        }
+    }
+
+    // Following function gives the margin of the trader
+    function getMarginOfTrader(
+        address traderAddress
+    ) external view returns (int256) {
+        if (marginOfLongPositionTraderHashmap[traderAddress] != 0) {
+            return marginOfLongPositionTraderHashmap[traderAddress];
+        } else if (marginOfShortPositionTraderHashmap[traderAddress] != 0) {
+            return marginOfShortPositionTraderHashmap[traderAddress];
+        } else {
+            return -1;
+            // Here -1 shows that trader has no open position
+        }
+    }
+
+    // Following function gives the maintenance margin of the trader
+    function getMaintenanceMarginOfTrader(
+        address traderAddress
+    ) external view returns (int256) {
+        if (marginOfLongPositionTraderHashmap[traderAddress] != 0) {
+            return maintenanceMarginOfLongPositionTraderHashmap[traderAddress];
+        } else if (marginOfShortPositionTraderHashmap[traderAddress] != 0) {
+            return maintenanceMarginOfShortPositionTraderHashmap[traderAddress];
+        } else {
+            return -1;
+            // Here -1 shows that trader has no open position
+        }
+    }
+
+    // Following function gives the trigger price of liquidation for open position traders
+    function getTriggerPriceOfTrader(
+        address traderAddress
+    ) external view returns (int256) {
+        if (marginOfLongPositionTraderHashmap[traderAddress] != 0) {
+            int256 index = triggerPriceForLongPositionLiquidationHeap.indexMap[
+                traderAddress
+            ] - 1;
+            return
+                triggerPriceForLongPositionLiquidationHeap
+                    .heap[uint256(index)]
+                    .triggerPrice;
+        } else if (marginOfShortPositionTraderHashmap[traderAddress] != 0) {
+            int256 index = triggerPriceForShortPositionLiquidationHeap.indexMap[
+                traderAddress
+            ] - 1;
+            return
+                triggerPriceForShortPositionLiquidationHeap
+                    .heap[uint256(index)]
+                    .triggerPrice;
+        } else {
+            return -1;
+            // this -1 indicates that this trader is not having an open position
+        }
+    }
+}
