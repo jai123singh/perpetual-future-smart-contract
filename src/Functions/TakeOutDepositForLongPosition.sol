@@ -70,7 +70,7 @@ contract TakeOutDepositForLongPosition is
         }
 
         // Transfer the deposit and update numberOfWeiInWeiPool and traderDepositHashmap
-        (bool success, ) = traderAddress.call{
+        (bool success, ) = payable(traderAddress).call{
             value: uint256(amountToBeWithdrawn)
         }("");
         require(success, "Call failed");

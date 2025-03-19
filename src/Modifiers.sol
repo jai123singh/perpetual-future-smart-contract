@@ -16,9 +16,14 @@ contract Modifiers is StateVariables, FundingRateMechanism {
     // onlyBackend modifier is applied on executeFundingRateMechanism function to make sure that only my Backend can call this function
     modifier onlyBackend() {
         require(
-            msg.sender == 0x4Aeabd84f257C0A46F1b0455CD23B12367231E2e,
+            msg.sender == backend,
             "You are not authorized to make this function call"
         );
+        _;
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only owner can perform this action");
         _;
     }
 

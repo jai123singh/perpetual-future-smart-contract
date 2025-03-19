@@ -41,14 +41,20 @@ contract ChangeMarginAndDepositAndTriggerPriceForShortPositionTraders is
                 amountChangeDueToFundingRateMechanism
             );
 
-            // calculate platform fee for funding rate mechanism
-            int256 platformFeeForFundingRateMechanism = calculateFundingRateMechanismFee(
-                    amountChangeDueToFundingRateMechanism
-                );
-            // deduct this fee user's deposit
-            traderDepositHashmap[
-                currentTraderAddress
-            ] -= platformFeeForFundingRateMechanism;
+            // Below we are collecting platform fee for funding rate mechanism
+
+            // we deduct platform fee, only from gainers. So we check if fundingRate > 0 to ensure that short position trader is gaining , and hence only then he should be charged
+            if (fundingRate > 0) {
+                // calculate platform fee for funding rate mechanism
+                int256 platformFeeForFundingRateMechanism = calculateFundingRateMechanismFee(
+                        amountChangeDueToFundingRateMechanism
+                    );
+                // deduct this fee user's deposit
+                traderDepositHashmap[
+                    currentTraderAddress
+                ] -= platformFeeForFundingRateMechanism;
+            }
+            // platform fee collection done
 
             // Check if current margin > new deposit. If it is so, then only update margin and trigger price
             if (

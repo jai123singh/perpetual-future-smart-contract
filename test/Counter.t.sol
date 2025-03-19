@@ -5,20 +5,13 @@ import {Test, console} from "forge-std/Test.sol";
 import {Perp} from "../src/Perp.sol";
 
 contract PerpTest is Test {
-    Counter public counter;
+    Perp public counter;
 
     function setUp() public {
-        counter = new Counter();
-        counter.setNumber(0);
+        counter = new Perp(1000000);
     }
 
-    function test_Increment() public {
-        counter.increment();
-        assertEq(counter.number(), 1);
-    }
+    function test_Increment() public {}
 
-function testFuzz_SetNumber(uint256 x) public {
-        counter.setNumber(x);
-        assertEq(counter.number(), x);
-    }
+    function testFuzz_SetNumber(uint256 x) public {}
 }

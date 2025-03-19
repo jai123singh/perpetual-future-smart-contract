@@ -25,25 +25,36 @@ contract CheckAndLiquidateLongPositions is
             ) = triggerPriceForLongPositionLiquidationHeap.top();
 
             if (currentPriceOfPerp < triggerPrice) {
-                triggerPriceForLongPositionLiquidationHeap.pop(); // Removes the topmost element from PQ
+                // Below we are calculating and deducting platform fee from user's deposit for automated liquidation. We are taking 5 percent of remaining margin ( intital margin - total loss) after liquidation, as the platform fee. We would collect this fee, only if remaining margin after liquidation doesnt become <=0.
 
-                // calculate platform fee for automated liquidation
+                // calculate the perp price at which the liquidation will occur
+                int256 newPerpPriceIfPositionIsLiquidated = calculatePerpPriceForShortPositionTrader(
+                        perpCountOfTraderWithLongPositionHashmap[traderAddress]
+                    );
+
+                // below we have calculated effective remaining margin after liquidation ie initial margin- final loss.
+
                 int256 effectiveRemainingMargin = marginOfLongPositionTraderHashmap[
                         traderAddress
                     ] -
                         ((priceAtWhichPerpWasBoughtHashmap[traderAddress] -
-                            currentPriceOfPerp) *
+                            newPerpPriceIfPositionIsLiquidated) *
                             perpCountOfTraderWithLongPositionHashmap[
                                 traderAddress
                             ]);
 
-                int256 platformFeeForAutomatedLiquidation = calculateAutomatedLiquidationFee(
+                int256 platformFeeForAutomatedLiquidation = 0;
+
+                if (effectiveRemainingMargin > 0) {
+                    platformFeeForAutomatedLiquidation = calculateAutomatedLiquidationFee(
                         effectiveRemainingMargin
                     );
-                // deduct it from user's deposit
-                traderDepositHashmap[
-                    traderAddress
-                ] -= platformFeeForAutomatedLiquidation;
+                    // deduct it from user's deposit
+                    traderDepositHashmap[
+                        traderAddress
+                    ] -= platformFeeForAutomatedLiquidation;
+                }
+                // Collecting platform fee for automated liquidation done.
 
                 // emit event to inform frontend about liquidation
                 emit Events.PositionLiquidated(

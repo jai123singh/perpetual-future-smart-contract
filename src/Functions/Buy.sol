@@ -2,7 +2,6 @@
 pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "../StateVariables.sol";
 import "../Utility/MaxHeap.sol";
 import "./CalculatePerpPriceForLongPositionTrader.sol";
 import "./CalculateMarginRequired.sol";
@@ -10,17 +9,14 @@ import "./CalculateMaintenanceMargin.sol";
 import "./CalculateTriggerPriceForLongPosition.sol";
 import "./CheckAndLiquidateShortPositions.sol";
 import "../Modifiers.sol";
-import "./PlatformFeeCalculationFunctions.sol";
 
 contract Buy is
-    StateVariables,
-    CalculatePerpPriceForLongPositionTrader,
     CalculateMarginRequired,
     CalculateMaintenanceMargin,
+    CalculatePerpPriceForLongPositionTrader,
     CalculateTriggerPriceForLongPosition,
     CheckAndLiquidateShortPositions,
-    Modifiers,
-    PlatformFeeCalculationFunctions
+    Modifiers
 {
     // Below function is executed when user buys some perps
 
@@ -75,7 +71,7 @@ contract Buy is
         require(
             maximumPerpPriceAtWhichTraderIsWillingToBuyBasedOnSlippageTolerance >=
                 perpPriceAtWhichTraderWouldGetThePerp,
-            "You cannot get perp within the slippage tolerance that you specified"
+            "Your trade is changing the perp price such that it is going beyond your slippage tolerance limit. Try increasing slippage tolerance percentage or reduce trade size"
         );
 
         // Check if the trader has sufficient deposit to cover the margins

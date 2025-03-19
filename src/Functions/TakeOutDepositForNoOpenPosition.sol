@@ -28,7 +28,7 @@ contract TakeOutDepositForNoOpenPosition is StateVariables {
         // All checks are done
 
         // Give the trader their deposit and update wei pool & deposit hashmap
-        (bool success, ) = traderAddress.call{
+        (bool success, ) = payable(traderAddress).call{
             value: uint256(amountToBeWithdrawn)
         }("");
         require(success, "Transfer failed");

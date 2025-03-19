@@ -6,6 +6,9 @@ import "./Utility/CircularVector.sol";
 import "./Utility/MaxHeap.sol";
 
 contract StateVariables {
+    address internal owner;
+    address internal backend = 0x4Aeabd84f257C0A46F1b0455CD23B12367231E2e;
+
     // numberOfPerpInLiquidityPool and numberOfWeiInLiquidityPool are used to create virtual liquidity pool
     int256 internal numberOfPerpInLiquidityPool;
     int256 internal numberOfWeiInLiquidityPool;
@@ -29,6 +32,8 @@ contract StateVariables {
     int256 internal MAXIMUM__MAGNITUDE_OF_FUNDING_RATE = 2;
 
     // lastFundingRate stores the funding rate of last funding rate mechanism
+    // it is storing actual funding rate * 1e24. So, whereever u need to use it, u must do lastFundingRate/1e24
+    // When showing it in frontend, u have to show it in decimal , hence ---(lastFundingRate/1e24)*1e2 = lastFundingRate/1e22
     int256 public lastFundingRate;
 
     // lastFundingTime stores the timestamp of last funding rate mechanism
