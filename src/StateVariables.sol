@@ -43,10 +43,10 @@ contract StateVariables {
     int256 internal nextFundingTime;
 
     //traderDepositHashmap is a hashmap that keeps track of the users deposit
-    mapping(address => int256) public traderDepositHashmap;
+    mapping(address => int256) internal traderDepositHashmap;
 
     //leverageUsedByTraderHashMap is a hashmap that stores the leverage used by the trader.
-    mapping(address => int256) public leverageUsedByTraderHashMap;
+    mapping(address => int256) internal leverageUsedByTraderHashMap;
 
     //below are the variables that exclusively store data about long position traders
 

@@ -13,7 +13,7 @@ contract CalculateTwap is StateVariables {
             int256[10] memory lastTenPerpPrices,
             int256[10] memory correspondingDuration
         ) = lastTenPerpPriceWithTimestamp
-                .getPerpPriceVectorAndTimestampVector();
+                .getPerpPriceVectorAndTimeDurationVector();
 
         for (uint256 i = 0; i < 10; i++) {
             summationOfTimeWeightedPrice +=
@@ -21,6 +21,7 @@ contract CalculateTwap is StateVariables {
                 correspondingDuration[i];
             summationOfTimeInterval += correspondingDuration[i];
         }
+
         return summationOfTimeWeightedPrice / summationOfTimeInterval;
     }
 }

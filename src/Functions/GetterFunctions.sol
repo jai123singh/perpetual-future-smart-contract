@@ -4,8 +4,9 @@ pragma solidity ^0.8.13;
 import "../StateVariables.sol";
 import "../Utility/MaxHeap.sol";
 import "../Utility/MinHeap.sol";
+import "../Modifiers.sol";
 
-contract GetterFunctions is StateVariables {
+contract GetterFunctions is StateVariables, Modifiers {
     using MaxHeapLib for MaxHeap;
     using MinHeapLib for MinHeap;
 
@@ -14,10 +15,24 @@ contract GetterFunctions is StateVariables {
         return numberOfPerpInLiquidityPool;
     }
 
+    // following function returns , how much deposit is present of a trader in the perp contract
+    function getAmountOfTraderDepositPresentInContract(
+        address traderAddress
+    ) external view checkUserValidity(traderAddress) returns (int256) {
+        return traderDepositHashmap[traderAddress];
+    }
+
+    // following function returns the leverage that trader used to open the current position
+    function getLeverageUsedByTrader(
+        address traderAddress
+    ) external view checkUserValidity(traderAddress) returns (int256) {
+        return leverageUsedByTraderHashMap[traderAddress];
+    }
+
     // Following function gives the number of perp in short or long position of a specific trader
     function getNumberOfPerpInOpenPositionOfTrader(
         address traderAddress
-    ) external view returns (int256) {
+    ) external view checkUserValidity(traderAddress) returns (int256) {
         if (marginOfLongPositionTraderHashmap[traderAddress] != 0) {
             return perpCountOfTraderWithLongPositionHashmap[traderAddress];
         } else {
@@ -28,7 +43,7 @@ contract GetterFunctions is StateVariables {
     // Following function gives the perp Price at which a trader entered a trade
     function getPerpPriceAtWhichTraderEnteredTheTrade(
         address traderAddress
-    ) external view returns (int256) {
+    ) external view checkUserValidity(traderAddress) returns (int256) {
         if (marginOfLongPositionTraderHashmap[traderAddress] != 0) {
             return priceAtWhichPerpWasBoughtHashmap[traderAddress];
         } else if (marginOfShortPositionTraderHashmap[traderAddress] != 0) {
@@ -42,7 +57,7 @@ contract GetterFunctions is StateVariables {
     // Following function gives the margin of the trader
     function getMarginOfTrader(
         address traderAddress
-    ) external view returns (int256) {
+    ) external view checkUserValidity(traderAddress) returns (int256) {
         if (marginOfLongPositionTraderHashmap[traderAddress] != 0) {
             return marginOfLongPositionTraderHashmap[traderAddress];
         } else if (marginOfShortPositionTraderHashmap[traderAddress] != 0) {
@@ -56,7 +71,7 @@ contract GetterFunctions is StateVariables {
     // Following function gives the maintenance margin of the trader
     function getMaintenanceMarginOfTrader(
         address traderAddress
-    ) external view returns (int256) {
+    ) external view checkUserValidity(traderAddress) returns (int256) {
         if (marginOfLongPositionTraderHashmap[traderAddress] != 0) {
             return maintenanceMarginOfLongPositionTraderHashmap[traderAddress];
         } else if (marginOfShortPositionTraderHashmap[traderAddress] != 0) {
@@ -70,7 +85,7 @@ contract GetterFunctions is StateVariables {
     // Following function gives the trigger price of liquidation for open position traders
     function getTriggerPriceOfTrader(
         address traderAddress
-    ) external view returns (int256) {
+    ) external view checkUserValidity(traderAddress) returns (int256) {
         if (marginOfLongPositionTraderHashmap[traderAddress] != 0) {
             int256 index = triggerPriceForLongPositionLiquidationHeap.indexMap[
                 traderAddress

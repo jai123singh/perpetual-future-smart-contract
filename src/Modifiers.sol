@@ -64,7 +64,7 @@ contract Modifiers is StateVariables, FundingRateMechanism {
     modifier checkUserValidity(address addressOfTrader) {
         require(
             msg.sender == addressOfTrader,
-            "You cannot trade on behalf of someone else"
+            "You cannot trade or check information on behalf of someone else"
         );
         _;
     }
