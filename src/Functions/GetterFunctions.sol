@@ -10,6 +10,26 @@ contract GetterFunctions is StateVariables, Modifiers {
     using MaxHeapLib for MaxHeap;
     using MinHeapLib for MinHeap;
 
+    // following function gives totalPlatformFeeCollected. It can only be called by owner.
+    function getTotalPlatformFeeCollected()
+        external
+        view
+        onlyOwner
+        returns (int256)
+    {
+        return totalPlatformFeeCollected;
+    }
+
+    // following function can only be owner. It gives the total wei in wei pool. It useful incase of extreme situtations. If uder extreme situtals wei in wei pool number becomes lesser than 0, so in order for the contract to function properly , owner would send some wei to the contract.
+    function getAmountOfWeiInWeiPool()
+        external
+        view
+        onlyOwner
+        returns (int256)
+    {
+        return numberOfWeiInWeiPool;
+    }
+
     // Following function gives the maximum number of perps that can be sold or bought
     function getMaxNumberOfTradablePerp() external view returns (int256) {
         return numberOfPerpInLiquidityPool;

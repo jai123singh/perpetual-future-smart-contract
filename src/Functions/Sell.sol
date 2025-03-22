@@ -34,12 +34,12 @@ contract Sell is
     )
         external
         executeFundingRateIfNeeded
+        checkUserValidity(addressOfTrader)
         doBasicChecks(
             addressOfTrader,
             leverageUsedByTrader,
             slippageToleranceOfTrader
         )
-        checkUserValidity(addressOfTrader)
     {
         // In our MVP, number of perp sold can only be integers , and it must be greater than 0 and lesser than total number of perp in liquidity pool(we have set upper limit so that , people cannot misuse it and long position trader and short position trader both can have atmost same impact on perp price change)
         require(
@@ -104,6 +104,10 @@ contract Sell is
 
         // Deduct platform fee from trader's deposit
         traderDepositHashmap[addressOfTrader] -= platformFeeToSellPerp;
+        // update totalPlatformFeeCollected
+        totalPlatformFeeCollected += platformFeeToSellPerp;
+        // update numberOfWeiInWeiPool
+        numberOfWeiInWeiPool -= platformFeeToSellPerp;
 
         // update the perpCountOfTraderWithShortPositionHashmap hashmap
 

@@ -7,10 +7,10 @@ import "./Functions/FundingRateMechanism.sol";
 contract Modifiers is StateVariables, FundingRateMechanism {
     // executeFundingRateIfNeeded modifier is applied on functions that are directly called by users ie takeOutDeposit, sell, deposit, closeOpenPosition, Buy, addMoreMarginToOpenPosition. This modifier checks if funding rate mechanism should be executed or not, and if it is to be executed, then it is executed
     modifier executeFundingRateIfNeeded() {
-        if ((int256(block.timestamp) + 15) >= nextFundingTime) {
+        _;
+        if ((int256(block.timestamp) + 15 seconds) >= nextFundingTime) {
             fundingRateMechanism();
         }
-        _;
     }
 
     // onlyBackend modifier is applied on executeFundingRateMechanism function to make sure that only my Backend can call this function
@@ -55,7 +55,7 @@ contract Modifiers is StateVariables, FundingRateMechanism {
         require(
             marginOfLongPositionTraderHashmap[addressOfTrader] == 0 &&
                 marginOfShortPositionTraderHashmap[addressOfTrader] == 0,
-            " You can open a new position , only if you dont already have an opened position "
+            " You can open a new position , only if you dont already have an open position "
         );
         _;
     }

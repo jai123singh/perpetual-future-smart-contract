@@ -53,6 +53,10 @@ contract CheckAndLiquidateShortPositions is
                     traderDepositHashmap[
                         traderAddress
                     ] -= platformFeeForAutomatedLiquidation;
+                    // update totalPlatformFeeCollected
+                    totalPlatformFeeCollected += platformFeeForAutomatedLiquidation;
+                    // update numberOfWeiInWeiPool
+                    numberOfWeiInWeiPool -= platformFeeForAutomatedLiquidation;
                 }
                 // Collecting platform fee for automated liquidation done.
 

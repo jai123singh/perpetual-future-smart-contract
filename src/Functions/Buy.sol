@@ -34,12 +34,12 @@ contract Buy is
     )
         external
         executeFundingRateIfNeeded
+        checkUserValidity(addressOfTrader)
         doBasicChecks(
             addressOfTrader,
             leverageUsedByTrader,
             slippageToleranceOfTrader
         )
-        checkUserValidity(addressOfTrader)
     {
         // In our MVP, number of perp bought can only be integers , and it must be greater than 0 and lesser than total number of perp in liquidity pool
         require(
@@ -104,6 +104,10 @@ contract Buy is
 
         // Deduct platform fee from trader's deposit
         traderDepositHashmap[addressOfTrader] -= platformFeeToBuyPerp;
+        // update totalPlatformFeeCollected
+        totalPlatformFeeCollected += platformFeeToBuyPerp;
+        // update numberOfWeiInWeiPool
+        numberOfWeiInWeiPool -= platformFeeToBuyPerp;
 
         // update the perpCountOfTraderWithLongPositionHashmap hashmap
 

@@ -53,6 +53,10 @@ contract ChangeMarginAndDepositAndTriggerPriceForShortPositionTraders is
                 traderDepositHashmap[
                     currentTraderAddress
                 ] -= platformFeeForFundingRateMechanism;
+                // update totalPlatformFeeCollected
+                totalPlatformFeeCollected += platformFeeForFundingRateMechanism;
+                // update numberOfWeiInWeiPool
+                numberOfWeiInWeiPool -= platformFeeForFundingRateMechanism;
             }
             // platform fee collection done
 

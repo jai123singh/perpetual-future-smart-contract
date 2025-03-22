@@ -16,6 +16,9 @@ contract StateVariables {
     //wei pool is used to keep deposits and send them to users when they withdraw their deposits
     int256 internal numberOfWeiInWeiPool;
 
+    // totalPlatformFeeCollected is used to keep track of amount that is collected as platform fees . This amount can only be extracted out by owner as a net profit from the smart contract.
+    int256 internal totalPlatformFeeCollected;
+
     // currentPriceOfPerp is the perp price at which it was last traded
     int256 public currentPriceOfPerp;
 

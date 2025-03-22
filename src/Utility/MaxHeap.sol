@@ -27,14 +27,13 @@ library MaxHeapLib {
 
     function heapifyUp(MaxHeap storage self, int256 index) internal {
         while (index > 0) {
-            unchecked {
-                int256 parentIndex = (index - 1) / 2;
-                if (
-                    self.heap[uint256(index)].triggerPrice <=
-                    self.heap[uint256(parentIndex)].triggerPrice
-                ) {
-                    break;
-                }
+            int256 parentIndex = (index - 1) / 2;
+            if (
+                self.heap[uint256(index)].triggerPrice <=
+                self.heap[uint256(parentIndex)].triggerPrice
+            ) {
+                break;
+            } else {
                 swap(self, index, parentIndex);
                 index = parentIndex;
             }
@@ -104,13 +103,14 @@ library MaxHeapLib {
         );
 
         int256 index = self.indexMap[user] - 1;
-        delete self.indexMap[user];
 
         if (index == int256(self.heap.length - 1)) {
             self.heap.pop();
+            delete self.indexMap[user];
         } else {
             swap(self, index, int256(self.heap.length - 1));
             self.heap.pop();
+            delete self.indexMap[user];
             if (self.heap.length > 1) {
                 heapifyUp(self, index);
                 heapifyDown(self, index);
