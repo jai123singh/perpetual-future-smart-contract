@@ -44,7 +44,7 @@ contract Sell is
     {
         require(
             perpPriceWhenTraderClickedSell > 0,
-            "Price at which you want to sell the perp cannot be lesser than 0."
+            "Price at which you want to sell the perp cannot be lesser than or equal to 0."
         );
         // In our MVP, number of perp sold can only be integers , and it must be greater than 0 and lesser than total number of perp in liquidity pool(we have set upper limit so that , people cannot misuse it and long position trader and short position trader both can have atmost same impact on perp price change)
         require(

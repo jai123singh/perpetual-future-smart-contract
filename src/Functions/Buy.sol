@@ -44,7 +44,7 @@ contract Buy is
     {
         require(
             perpPriceWhenTraderClickedBuy > 0,
-            "Price at which you want to buy the perp cannot be lesser than 0."
+            "Price at which you want to buy the perp cannot be lesser than or equal to 0."
         );
         // In our MVP, number of perp bought can only be integers , and it must be greater than 0 and lesser than total number of perp in liquidity pool
         require(
