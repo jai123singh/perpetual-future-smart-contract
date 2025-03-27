@@ -1,4 +1,5 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.13;
 import "../StateVariables.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
@@ -11,11 +12,14 @@ contract TakeOutDepositForNoOpenPosition is StateVariables {
     ) internal {
         // Check the validity of amount to be withdrawn
         require(
-            amountToBeWithdrawn > 0 &&
-                amountToBeWithdrawn <= traderDepositHashmap[traderAddress],
+            amountToBeWithdrawn > 0,
+            "Amount to be withdrawn must be greater than 0."
+        );
+        require(
+            amountToBeWithdrawn <= traderDepositHashmap[traderAddress],
             string(
                 abi.encodePacked(
-                    "The amount that you can withdraw is 0 to ",
+                    "The maximum amount that you can withdraw is ",
                     Strings.toString(
                         uint256(traderDepositHashmap[traderAddress])
                     ),
@@ -31,7 +35,7 @@ contract TakeOutDepositForNoOpenPosition is StateVariables {
         (bool success, ) = payable(traderAddress).call{
             value: uint256(amountToBeWithdrawn)
         }("");
-        require(success, "Transfer failed");
+        require(success, "Something went wrong while transferring the amount.");
 
         numberOfWeiInWeiPool -= amountToBeWithdrawn;
         traderDepositHashmap[traderAddress] -= amountToBeWithdrawn;

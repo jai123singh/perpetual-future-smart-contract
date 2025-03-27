@@ -5,10 +5,10 @@ import {Test, console} from "forge-std/Test.sol";
 import {Perp} from "../src/Perp.sol";
 
 contract PerpTest is Test {
-    Perp public counter;
+    Perp public perp;
 
     function setUp() public {
-        counter = new Perp(1000000);
+        perp = new Perp(1000000);
     }
 
     function test_Increment() public {}

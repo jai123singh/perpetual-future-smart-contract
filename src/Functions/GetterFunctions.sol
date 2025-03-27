@@ -1,4 +1,5 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.13;
 
 import "../StateVariables.sol";
@@ -32,7 +33,7 @@ contract GetterFunctions is StateVariables, Modifiers {
 
     // Following function gives the maximum number of perps that can be sold or bought
     function getMaxNumberOfTradablePerp() external view returns (int256) {
-        return numberOfPerpInLiquidityPool;
+        return (numberOfPerpInLiquidityPool - 1);
     }
 
     // following function returns , how much deposit is present of a trader in the perp contract
@@ -46,6 +47,11 @@ contract GetterFunctions is StateVariables, Modifiers {
     function getLeverageUsedByTrader(
         address traderAddress
     ) external view checkUserValidity(traderAddress) returns (int256) {
+        require(
+            marginOfLongPositionTraderHashmap[traderAddress] != 0 ||
+                marginOfShortPositionTraderHashmap[traderAddress] != 0,
+            "You do not have any open position."
+        );
         return leverageUsedByTraderHashMap[traderAddress];
     }
 
@@ -53,6 +59,11 @@ contract GetterFunctions is StateVariables, Modifiers {
     function getNumberOfPerpInOpenPositionOfTrader(
         address traderAddress
     ) external view checkUserValidity(traderAddress) returns (int256) {
+        require(
+            marginOfLongPositionTraderHashmap[traderAddress] != 0 ||
+                marginOfShortPositionTraderHashmap[traderAddress] != 0,
+            "You do not have any open position."
+        );
         if (marginOfLongPositionTraderHashmap[traderAddress] != 0) {
             return perpCountOfTraderWithLongPositionHashmap[traderAddress];
         } else {
@@ -64,13 +75,15 @@ contract GetterFunctions is StateVariables, Modifiers {
     function getPerpPriceAtWhichTraderEnteredTheTrade(
         address traderAddress
     ) external view checkUserValidity(traderAddress) returns (int256) {
+        require(
+            marginOfLongPositionTraderHashmap[traderAddress] != 0 ||
+                marginOfShortPositionTraderHashmap[traderAddress] != 0,
+            "You do not have any open position."
+        );
         if (marginOfLongPositionTraderHashmap[traderAddress] != 0) {
             return priceAtWhichPerpWasBoughtHashmap[traderAddress];
-        } else if (marginOfShortPositionTraderHashmap[traderAddress] != 0) {
-            return priceAtWhichPerpWasSoldHashmap[traderAddress];
         } else {
-            return -1;
-            // Here , -1 shows that trader has no open position
+            return priceAtWhichPerpWasSoldHashmap[traderAddress];
         }
     }
 
@@ -78,13 +91,15 @@ contract GetterFunctions is StateVariables, Modifiers {
     function getMarginOfTrader(
         address traderAddress
     ) external view checkUserValidity(traderAddress) returns (int256) {
+        require(
+            marginOfLongPositionTraderHashmap[traderAddress] != 0 ||
+                marginOfShortPositionTraderHashmap[traderAddress] != 0,
+            "You do not have any open position."
+        );
         if (marginOfLongPositionTraderHashmap[traderAddress] != 0) {
             return marginOfLongPositionTraderHashmap[traderAddress];
-        } else if (marginOfShortPositionTraderHashmap[traderAddress] != 0) {
-            return marginOfShortPositionTraderHashmap[traderAddress];
         } else {
-            return -1;
-            // Here -1 shows that trader has no open position
+            return marginOfShortPositionTraderHashmap[traderAddress];
         }
     }
 
@@ -92,13 +107,15 @@ contract GetterFunctions is StateVariables, Modifiers {
     function getMaintenanceMarginOfTrader(
         address traderAddress
     ) external view checkUserValidity(traderAddress) returns (int256) {
+        require(
+            marginOfLongPositionTraderHashmap[traderAddress] != 0 ||
+                marginOfShortPositionTraderHashmap[traderAddress] != 0,
+            "You do not have any open position."
+        );
         if (marginOfLongPositionTraderHashmap[traderAddress] != 0) {
             return maintenanceMarginOfLongPositionTraderHashmap[traderAddress];
-        } else if (marginOfShortPositionTraderHashmap[traderAddress] != 0) {
-            return maintenanceMarginOfShortPositionTraderHashmap[traderAddress];
         } else {
-            return -1;
-            // Here -1 shows that trader has no open position
+            return maintenanceMarginOfShortPositionTraderHashmap[traderAddress];
         }
     }
 
@@ -106,6 +123,11 @@ contract GetterFunctions is StateVariables, Modifiers {
     function getTriggerPriceOfTrader(
         address traderAddress
     ) external view checkUserValidity(traderAddress) returns (int256) {
+        require(
+            marginOfLongPositionTraderHashmap[traderAddress] != 0 ||
+                marginOfShortPositionTraderHashmap[traderAddress] != 0,
+            "You do not have any open position."
+        );
         if (marginOfLongPositionTraderHashmap[traderAddress] != 0) {
             int256 index = triggerPriceForLongPositionLiquidationHeap.indexMap[
                 traderAddress
@@ -114,7 +136,7 @@ contract GetterFunctions is StateVariables, Modifiers {
                 triggerPriceForLongPositionLiquidationHeap
                     .heap[uint256(index)]
                     .triggerPrice;
-        } else if (marginOfShortPositionTraderHashmap[traderAddress] != 0) {
+        } else {
             int256 index = triggerPriceForShortPositionLiquidationHeap.indexMap[
                 traderAddress
             ] - 1;
@@ -122,9 +144,6 @@ contract GetterFunctions is StateVariables, Modifiers {
                 triggerPriceForShortPositionLiquidationHeap
                     .heap[uint256(index)]
                     .triggerPrice;
-        } else {
-            return -1;
-            // this -1 indicates that this trader is not having an open position
         }
     }
 }

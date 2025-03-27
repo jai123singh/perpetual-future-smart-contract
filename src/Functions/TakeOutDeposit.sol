@@ -1,4 +1,5 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.13;
 import "./TakeOutDepositForLongPosition.sol";
 import "./TakeOutDepositForShortPosition.sol";
@@ -25,6 +26,10 @@ contract TakeOutDeposit is
         executeFundingRateIfNeeded
         checkUserValidity(traderAddress)
     {
+        require(
+            traderDepositHashmap[traderAddress] >= 0,
+            "You cannot withdraw any deposit as your balance is negative."
+        );
         if (marginOfLongPositionTraderHashmap[traderAddress] != 0) {
             takeOutDepositForLongPosition(traderAddress, amountToBeWithdrawn);
         } else if (marginOfShortPositionTraderHashmap[traderAddress] != 0) {

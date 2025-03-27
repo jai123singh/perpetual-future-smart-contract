@@ -1,4 +1,5 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.13;
 import "../StateVariables.sol";
 import "./CalculateTriggerPriceForShortPosition.sol";
@@ -40,8 +41,10 @@ contract TakeOutDepositForShortPosition is
             amountToBeWithdrawn <= maximumDepositThatCanBeWithdrawn,
             string(
                 abi.encodePacked(
-                    "Currently, the maximum amount that can be withdrawn is",
-                    Strings.toString(uint256(maximumDepositThatCanBeWithdrawn))
+                    "Currently, the maximum amount that can be withdrawn is ",
+                    Strings.toString(uint256(maximumDepositThatCanBeWithdrawn)),
+                    ", but you are requesting to withdraw: ",
+                    Strings.toString(uint256(amountToBeWithdrawn))
                 )
             )
         );
@@ -69,7 +72,7 @@ contract TakeOutDepositForShortPosition is
         (bool success, ) = payable(traderAddress).call{
             value: uint256(amountToBeWithdrawn)
         }("");
-        require(success, "Call failed");
+        require(success, "Something went wrong while transferring the amount.");
 
         numberOfWeiInWeiPool = numberOfWeiInWeiPool - amountToBeWithdrawn;
         traderDepositHashmap[traderAddress] =

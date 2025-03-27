@@ -1,4 +1,5 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
@@ -41,13 +42,17 @@ contract Sell is
             slippageToleranceOfTrader
         )
     {
+        require(
+            perpPriceWhenTraderClickedSell > 0,
+            "Price at which you want to sell the perp cannot be lesser than 0."
+        );
         // In our MVP, number of perp sold can only be integers , and it must be greater than 0 and lesser than total number of perp in liquidity pool(we have set upper limit so that , people cannot misuse it and long position trader and short position trader both can have atmost same impact on perp price change)
         require(
             numberOfPerpSold > 0 &&
-                numberOfPerpSold <= numberOfPerpInLiquidityPool,
+                numberOfPerpSold < numberOfPerpInLiquidityPool,
             string(
                 abi.encodePacked(
-                    "number of perps sold must be between 0 and ",
+                    "Number of perps to be sold to enter a short position must be greater than 0 and lesser than ",
                     Strings.toString(uint256(numberOfPerpInLiquidityPool)),
                     ", but you are requesting to sell: ",
                     Strings.toString(uint256(numberOfPerpSold))
@@ -86,7 +91,7 @@ contract Sell is
 
         require(
             traderDepositHashmap[addressOfTrader] >= marginRequired,
-            "You don't have enough deposit to cover the margin"
+            "You do not have enough deposit to cover the margin."
         );
 
         // check if trader has enough deposits to cover platform charges or not
@@ -97,7 +102,7 @@ contract Sell is
         require(
             traderDepositHashmap[addressOfTrader] >=
                 (marginRequired + platformFeeToSellPerp),
-            "You dont have enough deposit to cover platform fee after paying for margin"
+            "You do not have enough deposit to cover platform fee after paying for margin."
         );
 
         // All the required checks are done

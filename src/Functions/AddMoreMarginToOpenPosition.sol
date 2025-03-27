@@ -1,4 +1,5 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.13;
 
 import "./AddMoreMarginToLongPosition.sol";
@@ -18,7 +19,7 @@ contract AddMoreMarginToOpenPosition is
         require(
             marginOfLongPositionTraderHashmap[traderAddress] != 0 ||
                 marginOfShortPositionTraderHashmap[traderAddress] != 0,
-            "You don't have any open position"
+            "You do not have any open position"
         );
         if (marginOfLongPositionTraderHashmap[traderAddress] != 0) {
             addMoreMarginToLongPosition(traderAddress, amountToBeAdded);

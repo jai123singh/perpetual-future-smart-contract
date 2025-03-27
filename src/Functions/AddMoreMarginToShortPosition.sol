@@ -1,4 +1,5 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.13;
 import "../StateVariables.sol";
 import "./CalculateTriggerPriceForShortPosition.sol";
@@ -25,7 +26,7 @@ contract AddMoreMarginToShortPosition is
                     marginOfShortPositionTraderHashmap[traderAddress],
             string(
                 abi.encodePacked(
-                    "Amount of extra margin that you want to add to your open short position must be greater than 0 and lesser than or equals to ",
+                    "Amount of extra margin that you want to add to your open short position must be greater than 0 and lesser than or equal to ",
                     Strings.toString(
                         uint256(
                             traderDepositHashmap[traderAddress] -

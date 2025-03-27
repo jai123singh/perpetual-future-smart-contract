@@ -1,4 +1,5 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.13;
 
 import "./StateVariables.sol";
@@ -17,13 +18,13 @@ contract Modifiers is StateVariables, FundingRateMechanism {
     modifier onlyBackend() {
         require(
             msg.sender == backend,
-            "You are not authorized to make this function call"
+            "You are not authorized to make this function call."
         );
         _;
     }
 
     modifier onlyOwner() {
-        require(msg.sender == owner, "Only owner can perform this action");
+        require(msg.sender == owner, "Only owner can perform this action.");
         _;
     }
 
@@ -40,14 +41,14 @@ contract Modifiers is StateVariables, FundingRateMechanism {
                 leverageUsedByTrader == 5 ||
                 leverageUsedByTrader == 10 ||
                 leverageUsedByTrader == 20,
-            "leverage used must be 1,2,5,10 or 20"
+            "Leverage must be 1x,2x,5x,10x or 20x only."
         );
 
         //- For slippage, we are going to give , in the frontend, user the option to choose any percent from 0.01 to 100.00.............Hence, in the backend , we have to manage it like that. So, from frontend we will get slippage *100 number..........so at backend , we should have a number between 1 to 10000. Hence wherever calculations regarding slippage tolerance are present , we have to divide that calcuatioj by 100 at last.
         require(
             slippageToleranceOfTrader >= 0 &&
                 slippageToleranceOfTrader <= 10000,
-            "slippage tolerance percentage must be between 0 and 100 percent"
+            "Slippage tolerance percentage must be between 0 percent and 100 percent"
         );
 
         //below , we check if trader already has an open position or not
@@ -55,7 +56,7 @@ contract Modifiers is StateVariables, FundingRateMechanism {
         require(
             marginOfLongPositionTraderHashmap[addressOfTrader] == 0 &&
                 marginOfShortPositionTraderHashmap[addressOfTrader] == 0,
-            " You can open a new position , only if you dont already have an open position "
+            " You can open a new position only if you dont already have an open position."
         );
         _;
     }

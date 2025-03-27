@@ -1,4 +1,5 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
@@ -41,13 +42,17 @@ contract Buy is
             slippageToleranceOfTrader
         )
     {
+        require(
+            perpPriceWhenTraderClickedBuy > 0,
+            "Price at which you want to buy the perp cannot be lesser than 0."
+        );
         // In our MVP, number of perp bought can only be integers , and it must be greater than 0 and lesser than total number of perp in liquidity pool
         require(
             numberOfPerpBought > 0 &&
-                numberOfPerpBought <= numberOfPerpInLiquidityPool,
+                numberOfPerpBought < numberOfPerpInLiquidityPool,
             string(
                 abi.encodePacked(
-                    "number of perps bought must be between 0 and ",
+                    "Number of perps to be bought to open a long position must be greater than 0 and lesser than ",
                     Strings.toString(uint256(numberOfPerpInLiquidityPool)),
                     ", but you are requesting to buy: ",
                     Strings.toString(uint256(numberOfPerpBought))
@@ -86,7 +91,7 @@ contract Buy is
 
         require(
             traderDepositHashmap[addressOfTrader] >= marginRequired,
-            "You don't have enough deposit to cover the margin"
+            "You do not have enough deposit to cover the margin"
         );
 
         // check if trader has enough deposits to cover platform charges or not
@@ -97,7 +102,7 @@ contract Buy is
         require(
             traderDepositHashmap[addressOfTrader] >=
                 (marginRequired + platformFeeToBuyPerp),
-            "You dont have enough deposit to cover platform fee after paying for margin"
+            "You do not have enough deposit to cover platform fee after paying for margin"
         );
 
         // All the required checks are done

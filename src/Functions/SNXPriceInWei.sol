@@ -1,4 +1,5 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.13;
 
 import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
@@ -15,7 +16,7 @@ contract SNXPriceInWei {
         (, int256 ethPrice, , , ) = ethUsdPriceFeed.latestRoundData();
 
         // Validate prices
-        require(SNXPrice > 0 && ethPrice > 0, "Invalid price feed response");
+        require(SNXPrice > 0 && ethPrice > 0, "Invalid price feed response.");
 
         // Convert to wei-based price
         int256 SNXPriceInTermsOfWei = (SNXPrice * 1e18) / ethPrice;

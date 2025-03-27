@@ -5,14 +5,14 @@ import {Script, console} from "forge-std/Script.sol";
 import {Perp} from "../src/Perp.sol";
 
 contract CounterScript is Script {
-    Perp public counter;
+    Perp public perp;
 
     function setUp() public {}
 
     function run() public {
         vm.startBroadcast();
 
-        counter = new Perp(1000000);
+        perp = new Perp(1000000);
 
         vm.stopBroadcast();
     }
