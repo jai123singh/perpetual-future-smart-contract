@@ -79,7 +79,10 @@ contract FundingRateMechanism is
             return;
         }
 
-        if (triggerPriceForLongPositionLiquidationHeap.heap.length > 0) {
+        if (
+            triggerPriceForLongPositionLiquidationHeap.heap.length > 0 &&
+            fundingRate != 0
+        ) {
             changeMarginAndDepositAndTriggerPriceForLongPositionTraders(
                 fundingRate,
                 twap
@@ -87,7 +90,10 @@ contract FundingRateMechanism is
             // This function changes the margin, deposits, and trigger price of long position traders with an open position. It handles both- ie if funding rate is positive, it will decrease long position tranders deposits , and if it is negative, it will increase depsoits of long position traders
         }
 
-        if (triggerPriceForShortPositionLiquidationHeap.heap.length > 0) {
+        if (
+            triggerPriceForShortPositionLiquidationHeap.heap.length > 0 &&
+            fundingRate != 0
+        ) {
             changeMarginAndDepositAndTriggerPriceForShortPositionTraders(
                 fundingRate,
                 twap
