@@ -53,22 +53,29 @@ contract FundingRateMechanism is
     // The system may try to deduct the funding rate from the margin, but this can lead to liquidation if the margin falls below maintenance requirements.
 
     function fundingRateMechanism() internal {
-        // check if no position is open, then no need to do any funding rate mechanism
-        if (
-            triggerPriceForLongPositionLiquidationHeap.heap.length == 0 &&
-            triggerPriceForShortPositionLiquidationHeap.heap.length == 0
-        ) {
-            return;
-        }
-
-        // Checks are done above
-
         // TWAP is the time-weighted average perp price
         int256 twap = calculateTwap();
 
         int256 fundingRate = calculateFundingRate(twap); // This function calculates the current funding rate
 
-        if (fundingRate == 0) {
+        // following we are checking , if there is no open position, then we do not need to change anyone's deposit
+        if (
+            triggerPriceForLongPositionLiquidationHeap.heap.length == 0 &&
+            triggerPriceForShortPositionLiquidationHeap.heap.length == 0
+        ) {
+            // I saw all resources and found out that lastFundingTime and lastFundingRate should still be updated , even though, due to no open position, there is no deposit change in anyone's deposit.
+
+            // we are still updating lastFundingTime because it indicates when funding rate mechanism last was happened. Even though fund transfer didnot take place because no position was open, but the funding rate mechanism was still called.
+
+            // Also, it helps frontends and  backend( in case it got turned off and then came back) put their timer correctly . Suppose if we were not doing so, then lets say backend went down and then came back. now if it sees that lastFundingTime happened 14 hours ago, it might keep on trying to call the executeFundingRateMechanism function. Similarly, frontend might keep on showing "about to happen" in "next funding rate mechanism happening in:" section
+
+            lastFundingTime = int256(block.timestamp);
+            nextFundingTime = lastFundingTime + 8 hours;
+            lastFundingRate = fundingRate;
+            emit Events.FundingRateSettlement(
+                fundingRate,
+                int256(block.timestamp)
+            );
             return;
         }
 

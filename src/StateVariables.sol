@@ -35,9 +35,9 @@ contract StateVariables {
     // where ever u use MAXIMUM__MAGNITUDE_OF_FUNDING_RATE, the product must be divided by 100
     int256 internal MAXIMUM__MAGNITUDE_OF_FUNDING_RATE = 2;
 
-    // lastFundingRate stores the funding rate of last funding rate mechanism
+    // lastFundingRate stores the funding rate of last funding rate mechanism (in decimals)
     // it is storing actual funding rate * 1e24. So, whereever u need to use it, u must do lastFundingRate/1e24
-    // When showing it in frontend, u have to show it in decimal , hence ---(lastFundingRate/1e24)*1e2 = lastFundingRate/1e22
+    // When showing it in frontend, u have to show it in percentage , hence ---(lastFundingRate/1e24)*1e2 = lastFundingRate/1e22
     int256 public lastFundingRate;
 
     // lastFundingTime stores the timestamp of last funding rate mechanism

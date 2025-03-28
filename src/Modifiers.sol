@@ -9,7 +9,7 @@ contract Modifiers is StateVariables, FundingRateMechanism {
     // executeFundingRateIfNeeded modifier is applied on functions that are directly called by users ie takeOutDeposit, sell, deposit, closeOpenPosition, Buy, addMoreMarginToOpenPosition. This modifier checks if funding rate mechanism should be executed or not, and if it is to be executed, then it is executed
     modifier executeFundingRateIfNeeded() {
         _;
-        if ((int256(block.timestamp) + 15 seconds) >= nextFundingTime) {
+        if (int256(block.timestamp) >= nextFundingTime) {
             fundingRateMechanism();
         }
     }
