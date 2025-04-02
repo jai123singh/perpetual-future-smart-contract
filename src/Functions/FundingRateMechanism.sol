@@ -70,7 +70,7 @@ contract FundingRateMechanism is
             // Also, it helps frontends and  backend( in case it got turned off and then came back) put their timer correctly . Suppose if we were not doing so, then lets say backend went down and then came back. now if it sees that lastFundingTime happened 14 hours ago, it might keep on trying to call the executeFundingRateMechanism function. Similarly, frontend might keep on showing "about to happen" in "next funding rate mechanism happening in:" section
 
             lastFundingTime = int256(block.timestamp);
-            nextFundingTime = lastFundingTime + 8 hours;
+            nextFundingTime = lastFundingTime + int256(8 hours);
             lastFundingRate = fundingRate;
             emit Events.FundingRateSettlement(
                 fundingRate,
@@ -112,7 +112,7 @@ contract FundingRateMechanism is
         }
 
         lastFundingTime = int256(block.timestamp);
-        nextFundingTime = lastFundingTime + 8 hours;
+        nextFundingTime = lastFundingTime + int256(8 hours);
         lastFundingRate = fundingRate;
         emit Events.FundingRateSettlement(fundingRate, int256(block.timestamp));
     }

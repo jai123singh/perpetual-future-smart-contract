@@ -56,7 +56,7 @@ contract Modifiers is StateVariables, FundingRateMechanism {
         require(
             marginOfLongPositionTraderHashmap[addressOfTrader] == 0 &&
                 marginOfShortPositionTraderHashmap[addressOfTrader] == 0,
-            " You can open a new position only if you dont already have an open position."
+            " You can open a new position only if you do not already have an open position."
         );
         _;
     }

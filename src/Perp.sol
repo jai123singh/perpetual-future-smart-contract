@@ -33,7 +33,7 @@ contract Perp is
         totalPlatformFeeCollected = 0;
         lastFundingRate = 0;
         lastFundingTime = int256(block.timestamp);
-        nextFundingTime = lastFundingTime + 8 hours;
+        nextFundingTime = lastFundingTime + int256(8 hours);
         currentPriceOfPerp = getSNXPriceInWei();
         numberOfWeiInLiquidityPool =
             numberOfPerpInLiquidityPool *
@@ -45,6 +45,10 @@ contract Perp is
         );
         emit Events.PerpPriceUpdated(
             currentPriceOfPerp,
+            int256(block.timestamp)
+        );
+        emit Events.FundingRateSettlement(
+            lastFundingRate,
             int256(block.timestamp)
         );
     }

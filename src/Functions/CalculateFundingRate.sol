@@ -11,6 +11,10 @@ contract CalculateFundingRate is StateVariables, SNXPriceInWei {
     function calculateFundingRate(int256 twap) internal view returns (int256) {
         int256 spotPrice = getSNXPriceInWei();
 
+        require(
+            spotPrice > 0,
+            "Something went wrong, spotPrice of SNX in terms of wei came out to be 0"
+        );
         // Improve calculation to prevent precision loss
         int256 premiumIndex = ((twap - spotPrice) * 1e18) / spotPrice;
 

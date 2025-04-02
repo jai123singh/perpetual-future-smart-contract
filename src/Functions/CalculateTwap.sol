@@ -28,8 +28,8 @@ contract CalculateTwap is StateVariables {
         // We have implemented getPerpPriceVectorAndTimeDurationVector function in such a way that if summationOfTimeWeightedPrice is 0 then summationOfTimeInterval would for sure be 0. Hence we are not checking for the condition->  summationOfTimeWeightedPrice ==0.
         if (summationOfTimeInterval == 0) {
             return currentPriceOfPerp;
+        } else {
+            return summationOfTimeWeightedPrice / summationOfTimeInterval;
         }
-
-        return summationOfTimeWeightedPrice / summationOfTimeInterval;
     }
 }

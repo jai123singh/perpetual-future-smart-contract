@@ -39,7 +39,7 @@ library CircularVectorLib {
         // following i is iterator variable for perpPriceVector and timeDurationVector
         uint256 i = 0;
         uint256 numberOfRounds = 0;
-        // indexOfOldestElement is the index where the oldest perp price and its timestamp stays (amoung the latest 10 perp info)
+        // indexOfOldestElement is the index where the oldest perp price and its timestamp stays (among the latest 10 perp info)
         uint256 indexOfOldestElement = uint256(self.currentIndex);
 
         uint256 startingIndexOfLoop = indexOfOldestElement;
@@ -82,6 +82,7 @@ library CircularVectorLib {
             timeDurationVector[i] = timeDurationRequired;
             // following actions increase the index to cover the whole vector
             startingIndexOfLoop = startingIndexOfLoop + 1;
+            i++;
             if (startingIndexOfLoop > 9) {
                 startingIndexOfLoop = 0;
             }
