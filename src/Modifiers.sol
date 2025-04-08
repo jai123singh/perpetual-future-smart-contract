@@ -23,6 +23,14 @@ contract Modifiers is StateVariables, FundingRateMechanism {
         _;
     }
 
+    modifier onlyBeneficiary() {
+        require(
+            msg.sender == beneficiary,
+            "You are not authorized to make this function call."
+        );
+        _;
+    }
+
     modifier onlyOwner() {
         require(msg.sender == owner, "Only owner can perform this action.");
         _;

@@ -9,6 +9,8 @@ import "./Utility/MaxHeap.sol";
 contract StateVariables {
     address internal owner;
     address internal backend = 0x4Aeabd84f257C0A46F1b0455CD23B12367231E2e;
+    // beneficiary is the address that can withdraw platform fee collected
+    address internal beneficiary = 0x83534e0d0034DEE503055133Cf9e1e542aaC962c;
 
     // numberOfPerpInLiquidityPool and numberOfWeiInLiquidityPool are used to create virtual liquidity pool
     int256 internal numberOfPerpInLiquidityPool;

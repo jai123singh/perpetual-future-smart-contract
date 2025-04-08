@@ -7,7 +7,7 @@ library Events {
     event PositionLiquidated(
         address traderAddress,
         int256 timestamp,
-        int256 platfromFee
+        int256 platformFee
     );
     event FundingRateSettlement(int256 fundingRate, int256 timestamp);
 }
