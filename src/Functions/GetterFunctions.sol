@@ -36,7 +36,7 @@ contract GetterFunctions is
         return numberOfWeiInWeiPool;
     }
 
-    // following function gives the underlying price of the asset using oracle
+    // following function gives the price of underlying asset using oracle
     function getOraclePrice() external view returns (int256) {
         int256 oraclePriceOfSNXInWei = getSNXPriceInWei();
         return oraclePriceOfSNXInWei;
