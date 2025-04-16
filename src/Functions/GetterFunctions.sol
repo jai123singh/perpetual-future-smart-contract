@@ -6,8 +6,13 @@ import "../Utility/MaxHeap.sol";
 import "../Utility/MinHeap.sol";
 import "../Modifiers.sol";
 import "./PlatformFeeCalculationFunctions.sol";
+import "./SNXPriceInWei.sol";
 
-contract GetterFunctions is PlatformFeeCalculationFunctions, Modifiers {
+contract GetterFunctions is
+    PlatformFeeCalculationFunctions,
+    SNXPriceInWei,
+    Modifiers
+{
     using MaxHeapLib for MaxHeap;
     using MinHeapLib for MinHeap;
 
@@ -29,6 +34,12 @@ contract GetterFunctions is PlatformFeeCalculationFunctions, Modifiers {
         returns (int256)
     {
         return numberOfWeiInWeiPool;
+    }
+
+    // following function gives the underlying price of the asset using oracle
+    function getOraclePrice() external view returns (int256) {
+        int256 oraclePriceOfSNXInWei = getSNXPriceInWei();
+        return oraclePriceOfSNXInWei;
     }
 
     // Following function gives the maximum number of perps that can be sold or bought
