@@ -97,10 +97,11 @@ contract Perp is
             totalPlatformFeeCollected > 0,
             "No platform fee has been collected till now"
         );
+
+        uint256 amount = uint256(totalPlatformFeeCollected);
         totalPlatformFeeCollected = 0;
-        (bool success, ) = payable(msg.sender).call{
-            value: uint256(totalPlatformFeeCollected)
-        }("");
+
+        (bool success, ) = payable(msg.sender).call{value: amount}("");
         require(success, "Something went wrong while transferring the amount.");
     }
 }
